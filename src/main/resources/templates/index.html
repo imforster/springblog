@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}"lang="en">
+<link rel = "stylesheet" type = "text/css" href = "css/login.css" />
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="jumbotron main-content">
+			<h2>Welcome!</h2>
+		</div>
+	   	<div class="card border-light mb-3" style="margin: auto;width: 48rem;padding: 10px;" th:each="posts : ${posts}">
+			<h1 class="card-title" th:text="${posts.title}">Item description here...</h1>
+			<p class="card-text" th:text="${posts.post}">Item description here...</p>
+		</div>
+	</div>
+</body>
+</html>
+

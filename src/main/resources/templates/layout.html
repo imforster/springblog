@@ -1,0 +1,177 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+    <head th:fragment="head-fragment">
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
+        <link rel="stylesheet" href="../static/css/site.css" th:href="@{/css/site.css}"/>
+        <link rel = "stylesheet" type = "text/css" th:href="@{css/login.css}" />
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Sample Blog</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <a class="navbar-brand" th:href="@{/index}">Blog</a>
+                <div class="navbar-nav mr-auto">
+                    <ul class="navbar-nav">
+                        <li class="nav-item" sec:authorize="isAnonymous()">
+                            <a class="nav-link" onclick="document.getElementById('id01').style.display='block'">Post</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link" th:href="@{/post}">Post</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar-nav">
+                        <li class="nav-item" sec:authorize="isAnonymous()">
+                     		<button class="signupbtn" onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Signup</button>
+                     	</li>
+                        <li class="nav-item" sec:authorize="isAnonymous()">
+                        		<button class="loginbtn" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+                                <!-- a class="nav-link" th:href="@{/login}">Login</a -->
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                        	<span sec:authentication="name" style="color:white;margin: 8px 8px;">Unknown</span>
+                            <button class="logoutbtn" onclick="window.location.href='/logout'" style="width:auto;">Logout</button>
+                        
+                            <!-- a class="nav-link" th:href="@{/logout}">Logout</a -->
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main role="main">
+            <div layout:fragment="content"></div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p class="text-center text-uppercase text-muted">&copy; IMF Software Solutions 2019</p>
+            </div>
+        </footer>
+        
+        <div id="id01" class="modal">
+		  	<form class="modal-content animate" th:action="@{/login}" method="post">
+			    <div class="imgcontainer">
+			      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+			      <img src="img/user-2.png" alt="Avatar" class="avatar">
+			    </div>
+			
+			    <div class="container">
+			      <label for="username"><b>Username</b></label>
+			      <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username" autofocus="autofocus">
+			
+			      <label for="password"><b>Password</b></label>
+			      <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password">
+			        
+			      <button type="submit" class="btn btn-primary">Login</button>
+			      <label>
+			        <input type="checkbox" checked="checked" name="remember"> Remember me
+			      </label>
+			      <span class="sign"><a href="javascript:toggleSignup()">Signup</a></span>
+			    </div>
+			
+			    <div class="container" style="background-color:#f1f1f1">
+			      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+			
+			      <span class="password">Forgot <a href="#">password?</a></span>
+			    </div>
+			    <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> 
+	  		</form>
+		</div>
+		
+		<div id="id02" class="modal">
+		  	<form name="signup" class="modal-content animate" th:action="@{/signup}" onsubmit="return validateForm()" method="post">
+		  	    <div class="container">
+		  	    	<div class="imgcontainer">
+			      		<span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+			      		<h2>Signup</h2>
+			    	</div>
+		            <div id="signuperrordiv" style="display:none">
+		                <p class="alert alert-danger" id="alerttxt">Invalid username or password.</p>
+		            </div>
+		            <label for="firstName"><b>First Name</b></label>
+	                <input type="text" id="firstName" name="firstName"class="form-control" placeholder="Enter First Name" autofocus="autofocus">
+	                
+		            <label for "lastName"><b>Last Name</b></label>
+	                <input type="text" id="lastName" name="lastName"class="form-control" placeholder="Enter Last Name">
+	                
+		      		<label for="username"><b>Username</b></label>
+			      	<input type="text" id="userName" name="userName" class="form-control" placeholder="Enter Username">
+			
+			      	<label for="password"><b>Password</b></label>
+			      	<input type="password" id="password" name="password" class="form-control" placeholder="Enter Password">
+
+			      	<label for="confirmpassword"><b>Confirm Password</b></label>
+			      	<input type="password" id="confirmpassword" name="confirmpassword" class="form-control" placeholder="Confirm Password">
+	
+			      	<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        
+        <script>
+			// Get the modal
+			var modal = document.getElementById('id01');
+			var modal2 = document.getElementById('id02');
+			var signuperrordiv = document.getElementById('signuperrordiv');
+			var signuperror = document.getElementById('alerttxt');
+			
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+			    if (event.target == modal) {
+			        modal.style.display = "none";
+			    }
+			    if (event.target == modal2) {
+			        modal2.style.display = "none";
+			    }
+			}
+			
+			function toggleSignup() {
+				modal.style.display = "none";
+				modal2.style.display = "block";
+			}
+			
+			// Get the modal
+
+			
+			function validateForm() {
+			  var x = document.forms["signup"]["firstName"].value;
+			  if ((x == "") || (x.length < 3) || (x.length > 64)) {
+			    document.getElementById('signuperrordiv').style.display='inline';
+			    signuperror.innerHTML = "First name must be filled out (3-64 chars)";
+			    return false;
+			  }
+			  var y = document.forms["signup"]["lastName"].value;
+			  if ((y == "") || (y.length < 2) || (y.length > 64)) {
+			    document.getElementById('signuperrordiv').style.display='inline';
+			    signuperror.innerHTML = "Last name must be filled out (2-64 chars)";
+			    return false;
+			  }
+			  var z = document.forms["signup"]["userName"].value;
+			  if ((z == "") || (z.length < 6) || (z.length > 128)) {
+			    document.getElementById('signuperrordiv').style.display='inline';
+			    signuperror.innerHTML = "Username must be filled out (6-128 chars)";
+			    return false;
+			  }
+			  var p1 = document.forms["signup"]["password"].value;
+			  var p2 = document.forms["signup"]["confirmpassword"].value;
+			  if ((p1 == "") || (p2 == "") || (p1.length < 8) || (p2.length < 8)) {
+			    document.getElementById('signuperrordiv').style.display='inline';
+			    signuperror.innerHTML = "Passwords must be filled out (Must be 8 chars)";
+			    return false;
+			  }
+			  if (p1 != p2) {
+			    document.getElementById('signuperrordiv').style.display='inline';
+			    signuperror.innerHTML = "Passwords don't match!";
+			    return false;
+			  }
+			  signuperror.style.display='none';
+			}
+		</script>
+    </body>
+</html>
