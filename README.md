@@ -7,3 +7,5 @@ Project to create a template that makes use of the following Spring components t
 
 The sample application provides a basic signup, authentication and blog application that presents blog entries and
 authenticated users to post new blog entries.
+
+![Alt text](src/main/resources/blog-screen.png?raw=true "History Blog")
