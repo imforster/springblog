@@ -1,11 +1,13 @@
 package com.imfsoftware.springboot.jwt;
 
 import java.util.List;
+import java.util.Collections;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.imfsoftware.springboot.jwt.auth.UserRepository;
-import com.imfsoftware.springboot.jwt.blog.BlogEntryRepository;
 import com.imfsoftware.springboot.jwt.blog.BlogEntry;
+import com.imfsoftware.springboot.jwt.blog.BlogEntryRepository;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 @Controller
 @RequestMapping("/")
@@ -35,13 +38,16 @@ public class AppController {
 	@GetMapping({ "/", "/index" })
 	public String getHomePage(Model model) {
 		List<BlogEntry> entries = blogRepo.findAll();
+		Collections.reverse(entries);
 		if (entries.size() == 0) {
 			BlogEntry entry = new BlogEntry();
 			entry.setTitle("First Entry");
+			entry.setUsername("user1");
 			entry.setPost("This is my first fake post.");
 			entries.add(entry);
 			BlogEntry entry2 = new BlogEntry();
 			entry2.setTitle("Second Entry");
+			entry2.setUsername("user2");
 			entry2.setPost("This is my second fake post.");
 			entries.add(entry2);
 		}
@@ -61,7 +67,7 @@ public class AppController {
 
 	@GetMapping("/logout-success")
 	public String getLogout(Model model) {
-		return "index";
+		return "redirect:/index";
 	}
 
 	@PostMapping(path = "/signup")
@@ -74,6 +80,22 @@ public class AppController {
 		} else {
 			return "error";
 		}
+	}
+	
+	@GetMapping("/post")
+	public String getPost(Model model) {
+		return "post";
+	}
+	
+	@PostMapping(path = "/post")
+	public String postBlogEntry(@ModelAttribute @Valid BlogEntry blogEntry, Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		System.out.println(currentPrincipalName);
+		blogEntry.setUsername(currentPrincipalName);
+		System.out.println(blogEntry);
+		blogRepo.save(blogEntry);
+		return "redirect:/index";
 	}
 //	
 //	@GetMapping("/posts")

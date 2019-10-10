@@ -1,0 +1,43 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}"lang="en">
+<head>
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="jumbotron main-content">
+		<h2>Blog Post</h2>
+	</div>
+    <div class="container jumbotron">
+        <form name="signup" th:action="@{/post}" th:object="${post}" onsubmit="return validateForm()" method="post">
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">
+                    Invalid username or password.
+                </div>
+            </div>
+            <div id="posterrordiv" style="display:none">
+                <p class="alert alert-danger" id="alerttxt">Invalid username or password.</p>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-md-12">
+                    <input type="text" name="title" placeholder="Title">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-md-12">
+                    <textarea rows = "10" cols = "100" placeholder="Details go here.." name = "post"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+     </div>
+   </div>
+</body>
+</html>
+ 
